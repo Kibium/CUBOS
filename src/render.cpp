@@ -35,6 +35,7 @@ namespace RenderVars {
 	glm::mat4 _MVP;
 	glm::mat4 _inv_modelview;
 	glm::vec4 _cameraPoint;
+	glm::mat4 _ourProj, _ourView, _ourModel;
 
 	struct prevMouse {
 		float lastx, lasty;
@@ -51,6 +52,10 @@ void GLResize(int width, int height) {
 	glViewport(0, 0, width, height);
 	if(height != 0) RV::_projection = glm::perspective(RV::FOV, (float)width / (float)height, RV::zNear, RV::zFar);
 	else RV::_projection = glm::perspective(RV::FOV, 0.f, RV::zNear, RV::zFar);
+
+	if (height != 0) RV::_ourProj = glm::perspective(RV::FOV, (float)width / (float)height, RV::zNear, RV::zFar);
+	else RV::_ourProj = glm::perspective(RV::FOV, 0.f, RV::zNear, RV::zFar);
+
 }
 
 void GLmousecb(MouseEvent ev) {
@@ -88,6 +93,7 @@ void GLinit(int width, int height) {
 	glEnable(GL_CULL_FACE);
 
 	RV::_projection = glm::perspective(RV::FOV, (float)width/(float)height, RV::zNear, RV::zFar);
+	RV::_ourProj = glm::perspective(RV::FOV, (float)width / (float)height, RV::zNear, RV::zFar);
 
 	//Setup shaders & geometry
 	Box::setupCube();
@@ -109,11 +115,22 @@ void GLrender() {
 	RV::_modelView = glm::rotate(RV::_modelView, RV::rota[1], glm::vec3(1.f, 0.f, 0.f));
 	RV::_modelView = glm::rotate(RV::_modelView, RV::rota[0], glm::vec3(0.f, 1.f, 0.f));
 
+	//////////////////////
+	////ES NOSTRE CUBO////
+	//////////////////////
+
+	RV::_ourView = glm::mat4(1.f);
+	RV::_ourView = glm::translate(RV::_ourView, glm::vec3(RV::panv[0],-2, RV::panv[2])); // Lo que esta dentro del glm::Vec3 mueve coordenadas x, y, z del cubo pequeño
+	RV::_ourView = glm::rotate(RV::_ourView, RV::rota[1], glm::vec3(1.f, 0.f, 0.f)); // rotar-lo
+	RV::_ourView = glm::rotate(RV::_ourView, RV::rota[0], glm::vec3(0.f, 1.f, 0.f));
+
+
+
 	//_inv_modelview = glm::inverse(_modelView);
 	//_cameraPoint = _inv_modelview * glm::vec4(0.f, 0.f, 0.f, 1.f);
 
 	RV::_MVP = RV::_projection * RV::_modelView;
-
+	RV::_ourModel = RV::_ourProj * RV::_ourView;
 	//render code
 	Box::drawCube();
 	Axis::drawAxis();

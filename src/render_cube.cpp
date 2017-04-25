@@ -5,8 +5,8 @@ extern GLuint compileShader(const char* shaderStr, GLenum shaderType, const char
 extern void linkProgram(GLuint program);
 
 namespace RenderVars {
-extern glm::mat4 _modelView;
-extern glm::mat4 _MVP;
+extern glm::mat4 _ourView;
+extern glm::mat4 _ourModel;
 }
 
 namespace Cube {
@@ -15,6 +15,7 @@ GLuint cubeVbo[3];
 GLuint cubeShaders[2];
 GLuint cubeProgram;
 glm::mat4 objMat = glm::mat4(1.f);
+
 
 extern const float halfW = 0.5f;
 int numVerts = 24 + 6; //4 vertex/face * 6 faces + 6 PRIMITIVE RESTART
@@ -142,8 +143,8 @@ void drawCube() {
 	glBindVertexArray(cubeVao);
 	glUseProgram(cubeProgram);
 	glUniformMatrix4fv(glGetUniformLocation(cubeProgram, "objMat"), 1, GL_FALSE, glm::value_ptr(objMat));
-	glUniformMatrix4fv(glGetUniformLocation(cubeProgram, "mv_Mat"), 1, GL_FALSE, glm::value_ptr(RenderVars::_modelView));
-	glUniformMatrix4fv(glGetUniformLocation(cubeProgram, "mvpMat"), 1, GL_FALSE, glm::value_ptr(RenderVars::_MVP));
+	glUniformMatrix4fv(glGetUniformLocation(cubeProgram, "mv_Mat"), 1, GL_FALSE, glm::value_ptr(RenderVars::_ourView));
+	glUniformMatrix4fv(glGetUniformLocation(cubeProgram, "mvpMat"), 1, GL_FALSE, glm::value_ptr(RenderVars::_ourModel));
 	glUniform4f(glGetUniformLocation(cubeProgram, "color"), 0.1f, 1.f, 1.f, 0.f);
 	glDrawElements(GL_TRIANGLE_STRIP, numVerts, GL_UNSIGNED_BYTE, 0);
 
