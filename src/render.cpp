@@ -120,7 +120,7 @@ void GLrender() {
 	//////////////////////
 
 	RV::_ourView = glm::mat4(1.f);
-	RV::_ourView = glm::translate(RV::_ourView, glm::vec3(RV::panv[0],-2, RV::panv[2])); // Lo que esta dentro del glm::Vec3 mueve coordenadas x, y, z del cubo pequeño
+	RV::_ourView = glm::translate(RV::_ourView, glm::vec3(RV::panv[0], RV::panv[1] + 1, RV::panv[2])); // Lo que esta dentro del glm::Vec3 mueve coordenadas x, y, z del cubo pequeño
 	RV::_ourView = glm::rotate(RV::_ourView, RV::rota[1], glm::vec3(1.f, 0.f, 0.f)); // rotar-lo
 	RV::_ourView = glm::rotate(RV::_ourView, RV::rota[0], glm::vec3(0.f, 1.f, 0.f));
 
