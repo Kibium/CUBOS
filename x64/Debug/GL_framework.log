@@ -1,5 +1,8 @@
-﻿  render_cube.cpp
-  GL_framework.vcxproj -> C:\Users\jcompany\Documents\GitHub\CUBOS\x64\Debug\GL_framework.exe
-  GL_framework.vcxproj -> C:\Users\jcompany\Documents\GitHub\CUBOS\x64\Debug\GL_framework.pdb (Partial PDB)
+﻿  physics.cpp
+c:\users\hzhou\source\repos\cubos3\src\physics.cpp(41): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\hzhou\source\repos\cubos3\src\physics.cpp(42): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\hzhou\source\repos\cubos3\src\physics.cpp(43): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  GL_framework.vcxproj -> C:\Users\hzhou\Source\Repos\CUBOS3\x64\Debug\GL_framework.exe
+  GL_framework.vcxproj -> C:\Users\hzhou\Source\Repos\CUBOS3\x64\Debug\GL_framework.pdb (Partial PDB)
   0 File(s) copied
   0 File(s) copied
