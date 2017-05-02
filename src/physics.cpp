@@ -22,29 +22,47 @@ void GUI() {
 
 extern glm::vec3 randPos;
 extern float x, y, z,rx,ry,rz;
+glm::mat4 transform; // Matriu els canvis 
 
-glm::mat4 position(1.f);
-glm::vec3 force;
-glm::vec3 rotation;
+
+class Cubo {
+public:
+
+	glm::vec3 xC; // position
+	glm::vec3 lastxC; //lastP
+	glm::mat4 qC; // quaternions - orientation
+	glm::vec3 pC; // Lineal momentum
+	glm::vec3 lC; // Angular momentum
+
+};
+Cubo cub;
 void PhysicsInit() {
-	//
+
+	//Init
+
+	
 	x = 0;
 	z = 0;
 	y = 5;
-	//randPos = glm::vec3(x, y, z);
-	//glm::translate(position, randPos);
+
+	cub.xC = glm::vec3(x, y, z);
+	cub.qC = glm::mat4(1.0f);
+	cub.pC = glm::vec3(0.f, 0.f, 0.f);
+	cub.lC = glm::vec3(0.f, 0.f, 0.f);
+
 	
 
 }
 void PhysicsUpdate(float dt) {
 	//TODO
-	ry = rand() % 3;
-	rz = rand()%3;
-	rx = rand() % 3;
+	//ry = rand() % 1; // loco
+	//rz = rand() % 2;
+	//rx = rand() % 1;
+
+	
 
 
-
-	Cube::updateCube(position);
+	Cube::updateCube(transform);
 }
 void PhysicsCleanup() {
 	//TODO

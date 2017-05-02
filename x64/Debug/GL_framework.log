@@ -1,8 +1,8 @@
 ﻿  physics.cpp
-c:\users\hzhou\source\repos\cubos3\src\physics.cpp(41): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\hzhou\source\repos\cubos3\src\physics.cpp(42): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\hzhou\source\repos\cubos3\src\physics.cpp(43): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-  GL_framework.vcxproj -> C:\Users\hzhou\Source\Repos\CUBOS3\x64\Debug\GL_framework.exe
-  GL_framework.vcxproj -> C:\Users\hzhou\Source\Repos\CUBOS3\x64\Debug\GL_framework.pdb (Partial PDB)
-  0 File(s) copied
-  0 File(s) copied
+c:\users\toni\documents\github\cubos\src\physics.cpp(51): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+c:\users\toni\documents\github\cubos\src\physics.cpp(52): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+c:\users\toni\documents\github\cubos\src\physics.cpp(53): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+  GL_framework.vcxproj -> C:\Users\Toni\Documents\GitHub\CUBOS\x64\Debug\GL_framework.exe
+  GL_framework.vcxproj -> C:\Users\Toni\Documents\GitHub\CUBOS\x64\Debug\GL_framework.pdb (Partial PDB)
+  0 archivo(s) copiado(s)
+  0 archivo(s) copiado(s)
