@@ -22,47 +22,78 @@ void GUI() {
 
 extern glm::vec3 randPos;
 extern float x, y, z,rx,ry,rz;
-glm::mat4 transform; // Matriu els canvis 
+glm::mat4 position(1.f);
 
 
-class Cubo {
+
+class Cub {
 public:
+	glm::vec3 xC;
+	glm::mat3 qC;// quaternions
+	glm::vec3 CoM;
 
-	glm::vec3 xC; // position
-	glm::vec3 lastxC; //lastP
-	glm::mat4 qC; // quaternions - orientation
-	glm::vec3 pC; // Lineal momentum
-	glm::vec3 lC; // Angular momentum
+	glm::vec3 vel;
 
-};
-Cubo cub;
-void PhysicsInit() {
+	float mass;
 
-	//Init
+	glm::vec3 force;
+	glm::vec3 pC, lC;
 
+	glm::mat3 iBoxC;
+	glm::mat3 iC;
 	
-	x = 0;
-	z = 0;
-	y = 5;
+	float torque;
+	float wC;
 
-	cub.xC = glm::vec3(x, y, z);
-	cub.qC = glm::mat4(1.0f);
+private:
+	
+
+};	
+
+Cub cub;
+
+void PhysicsInit() {
+	//
+
+	randPos = glm::vec3(0.f, 0.f, 0.f);
+	cub.xC = randPos;      
+	cub.force = glm::vec3(0.f, -9.81f, 0.f);
 	cub.pC = glm::vec3(0.f, 0.f, 0.f);
 	cub.lC = glm::vec3(0.f, 0.f, 0.f);
-
-	
-
+	cub.iC = glm::mat3(1.0f);
+	cub.iBoxC = glm::mat3(1.0f);
+	cub.mass = 1;
+	cub.vel = glm::vec3(0.f, 0.f, 0.f);
+	cub.qC = glm::mat3(1.0f);
+	cub.torque = 0.2f;
+	cub.wC = 0.0f;
 }
 void PhysicsUpdate(float dt) {
 	//TODO
-	//ry = rand() % 1; // loco
-	//rz = rand() % 2;
-	//rx = rand() % 1;
+	//ry = rand() % 3;
+	//rz = rand()%3;
+	//rx = rand() % 3;
 
-	
+	cub.lC = cub.lC + cub.torque * dt; //2.L
+
+	cub.iBoxC = glm::mat3((1.f / 12.f) * cub.mass*(1 + 1)); 
+
+	cub.iBoxC = glm::inverse(cub.iBoxC); 
+
+	cub.iC = cub.qC * glm::inverse(cub.iBoxC) * glm::transpose(cub.qC); //5.I
+
+	//cub.wC = cub.iC * cub.lC; //6.w 
+
+	cub.pC = cub.pC + dt*cub.force; //1.I
+
+	cub.vel = cub.pC / cub.mass;
+
+	cub.xC = cub.xC + cub.vel * dt;
 
 
-	Cube::updateCube(transform);
+	randPos = glm::vec3(cub.xC.x, 5+ cub.xC.y, cub.xC.z);
+
+
 }
 void PhysicsCleanup() {
 	//TODO

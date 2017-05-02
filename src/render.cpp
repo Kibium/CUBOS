@@ -108,8 +108,17 @@ void GLcleanup() {
 	Axis::cleanupAxis();
 	cleanupPrims();
 }
+
+
 glm::vec3 randPos;
+
+
+
 float x, y, z,rx,ry,rz;
+
+
+
+
 void GLrender() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -121,12 +130,11 @@ void GLrender() {
 	//////////////////////
 	////ES NOSTRE CUBO////
 	//////////////////////
-	randPos = glm::vec3(RV::panv[0] + x, RV::panv[1] + y * cos(RV::rota[1]), RV::panv[2] + z);
+	randPos = glm::vec3(RV::panv[0] + randPos.x, RV::panv[1] + randPos.y * cos(RV::rota[1]), RV::panv[2] + randPos.z);
 	RV::_ourView = glm::mat4(1.f);
 	RV::_ourView = glm::translate(RV::_ourView, randPos); // Lo que esta dentro del glm::Vec3 mueve coordenadas x, y, z del cubo pequeño
-	RV::_ourView = glm::rotate(RV::_ourView, RV::rota[0]+rx, glm::vec3(1.f, 0.f, 0.f)); // rotar-lo
-	RV::_ourView = glm::rotate(RV::_ourView, RV::rota[1]+ry, glm::vec3(0.f, 1.f, 0.f));
-	RV::_ourView = glm::rotate(RV::_ourView, RV::rota[2] + rz, glm::vec3(0.f, 0.f, 1.f));
+	RV::_ourView = glm::rotate(RV::_ourView, RV::rota[1], glm::vec3(1.f, 0.f, 0.f));
+	RV::_ourView = glm::rotate(RV::_ourView, RV::rota[0], glm::vec3(0.f, 1.f, 0.f));
 
 
 
