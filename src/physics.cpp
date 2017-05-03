@@ -46,7 +46,9 @@ public:
 	glm::mat3 iC; //Intertia Tensor
 	
 	float torque; //Torque
-	float wC; //Velocidad Angular
+	glm::vec3 wC; //Velocidad Angular
+	float wQuat;
+
 
 private:
 	
@@ -68,8 +70,8 @@ void PhysicsInit() {
 	cub.mass = 1;
 	cub.vel = glm::vec3(0.f, 0.f, 0.f);
 	 
-	cub.torque = 0.2f;
-	cub.wC = 0.0f;
+	cub.torque = 0.0f;
+	cub.wC = glm::vec3(0.0f);
 }
 
 void PhysicsUpdate(float dt) {
@@ -88,10 +90,10 @@ void PhysicsUpdate(float dt) {
 
 	cub.rC = glm::mat3_cast(cub.qC);
 	cub.iC = cub.rC * cub.iBodyC * glm::transpose(cub.rC);
-	//cub.wC = cub.iC * cub.lC;
-
-	//cub.qC = cub.qC + dt * 1 / 2 * cub.qC(0, cub.wC) * cub.qC;
-
+	cub.wC = cub.iC * cub.lC;
+	cub.qC = cub.qC + dt * 1/2 * glm::quat(0.f, 0.f,0.f, cub.wQuat) * cub.qC;
+	cub.qC = normalize(cub.qC);
+	qMat4 = mat4_cast(cub.qC);
 	
 
 	/*
