@@ -23,10 +23,10 @@ void GUI() {
 }
 
 extern glm::vec3 randPos;
-extern float x, y, z,rx,ry,rz;
+extern float x, y, z, rx, ry, rz;
 glm::mat4 position(1.f);
 extern glm::mat4 qMat4; //Quaternion to matrix4
-
+extern glm::quat externQ;
 
 class Cub {
 public:
@@ -44,16 +44,12 @@ public:
 
 	glm::mat3 iBodyC; //Inertia Tensor Body
 	glm::mat3 iC; //Intertia Tensor
-	
+
 	float torque; //Torque
 	glm::vec3 wC; //Velocidad Angular
 	float wQuat;
-
-
 private:
-	
-
-};	
+};
 
 Cub cub;
 
@@ -61,17 +57,18 @@ void PhysicsInit() {
 	//
 
 	randPos = glm::vec3(0.f, 0.f, 0.f);
-	cub.xC = randPos;      
+	cub.xC = randPos;
 	cub.force = glm::vec3(0.f, -9.81f, 0.f);
 	cub.pC = glm::vec3(0.f, 0.f, 0.f);
-	cub.lC = glm::vec3(0.f, 0.f, 0.f); 
+	cub.lC = glm::vec3(0.f, 0.f, 0.f);
 	cub.iC = glm::mat3(1.0f);
 	cub.iBodyC = glm::mat3(1.0f);
 	cub.mass = 1;
 	cub.vel = glm::vec3(0.f, 0.f, 0.f);
-	 
+	cub.rC = glm::mat3(0.f);
 	cub.torque = 0.0f;
-	cub.wC = glm::vec3(0.0f);
+	cub.wC = glm::vec3(0.f);
+	cub.qC = glm::quat(0.f, 0.f, 0.f, 0.f);
 }
 
 void PhysicsUpdate(float dt) {
@@ -83,43 +80,30 @@ void PhysicsUpdate(float dt) {
 	//Translacion
 	cub.pC = cub.pC + dt*cub.force;
 	cub.vel = cub.pC / cub.mass;
-	cub.xC = cub.xC + dt * cub.vel;
 
+	cub.xC = cub.xC + dt * cub.vel;
 	//Rotacion
 	cub.lC = cub.lC + cub.torque * dt;
 
 	cub.rC = glm::mat3_cast(cub.qC);
 	cub.iC = cub.rC * cub.iBodyC * glm::transpose(cub.rC);
 	cub.wC = cub.iC * cub.lC;
-	cub.qC = cub.qC + dt * 1/2 * glm::quat(0.f, 0.f,0.f, cub.wQuat) * cub.qC;
+	cub.qC = cub.qC + dt *1.f / 2.f * glm::quat(0.f, cub.wC)  * cub.qC;
 	cub.qC = normalize(cub.qC);
 	qMat4 = mat4_cast(cub.qC);
-	
-
 	/*
-	
-
-	cub.iBodyC = glm::mat3((1.f / 12.f) * cub.mass*(1 + 1)); 
-
-	cub.iBodyC = glm::inverse(cub.iBodyC); 
-
-	cub.iC = cub.qC * (cub.iBodyC) * glm::transpose(cub.qC); 
-
-	
-
-	
-
-	//cub.wC = cub.iC * cub.lC; //6.w 
-
-
+	cub.iBodyC = glm::mat3((1.f / 12.f) * cub.mass*(1 + 1));
+	cub.iBodyC = glm::inverse(cub.iBodyC);
+	cub.iC = cub.qC * (cub.iBodyC) * glm::transpose(cub.qC);
+	//cub.wC = cub.iC * cub.lC; //6.w
 	cub.xC = cub.xC + cub.vel * dt;
-
-
-	randPos = glm::vec3(cub.xC.x, 5+ cub.xC.y, cub.xC.z);
 	*/
+	externQ = cub.qC;
+	randPos = glm::vec3(cub.xC.x, 5 + cub.xC.y, cub.xC.z);
 
 }
 void PhysicsCleanup() {
 	//TODO
 }
+
 
