@@ -1,5 +1,16 @@
-﻿  physics.cpp
-  GL_framework.vcxproj -> C:\Users\jcompany\Documents\GitHub\CUBOS\x64\Debug\GL_framework.exe
-  GL_framework.vcxproj -> C:\Users\jcompany\Documents\GitHub\CUBOS\x64\Debug\GL_framework.pdb (Partial PDB)
+﻿  render_prims.cpp
+  render_cube.cpp
+  render.cpp
+  physics.cpp
+c:\users\hzhou\desktop\new folder\cubos\src\physics.cpp(115): warning C4477: 'printf' : format string '%f' requires an argument of type 'double', but variadic argument 2 has type 'glm::vec3'
+  main.cpp
+  imgui_impl_glfw_gl3.cpp
+  imgui_draw.cpp
+  imgui_demo.cpp
+  imgui.cpp
+  Generating Code...
+  LINK : C:\Users\hzhou\Desktop\New folder\CUBOS\x64\Debug\GL_framework.exe not found or not built by the last incremental link; performing full link
+  GL_framework.vcxproj -> C:\Users\hzhou\Desktop\New folder\CUBOS\x64\Debug\GL_framework.exe
+  GL_framework.vcxproj -> C:\Users\hzhou\Desktop\New folder\CUBOS\x64\Debug\GL_framework.pdb (Partial PDB)
   0 File(s) copied
   0 File(s) copied

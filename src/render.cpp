@@ -118,7 +118,7 @@ glm::quat externQ;
 float x, y, z, rx, ry, rz;
 
 
-
+extern glm::mat4 externRV;
 
 void GLrender() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -135,9 +135,12 @@ void GLrender() {
 
 	RV::_ourView = glm::mat4(1.f);
 	RV::_ourView = glm::translate(RV::_ourView, randPos); // Lo que esta dentro del glm::Vec3 mueve coordenadas x, y, z del cubo pequeño
-														  //RV::_ourView = glm::rotate(RV::_ourView, RV::rota[0], glm::vec3(RV::panv[0] * sin(RV::rota[0]), RV::panv[1] * sin(RV::rota[1]), RV::panv[2] * sin(RV::rota[2])));
-	RV::_ourView = RV::_ourView*qMat4;
 
+														  //RV::_ourView = glm::rotate(RV::_ourView, RV::rota[0], glm::vec3(RV::panv[0] * sin(RV::rota[0]), RV::panv[1] * sin(RV::rota[1]), RV::panv[2] * sin(RV::rota[2])));
+
+
+	RV::_ourView = RV::_ourView*qMat4;
+	externRV = RV::_ourView;
 	//_inv_modelview = glm::inverse(_modelView);
 	//_cameraPoint = _inv_modelview * glm::vec4(0.f, 0.f, 0.f, 1.f);
 
@@ -845,6 +848,8 @@ void main() {\n\
 		glDisable(GL_PRIMITIVE_RESTART);
 	}
 }
+
+
 
 
 

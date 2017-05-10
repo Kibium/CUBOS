@@ -1,13 +1,16 @@
+
 #include <glm\gtc\matrix_transform.hpp>
 #include <imgui\imgui.h>
 #include <imgui\imgui_impl_glfw_gl3.h>
 #include <glm\mat4x4.hpp>
 #include <glm\gtc\quaternion.hpp>
-
+#include <iostream>
 bool show_test_window = false;
+float halfW = 0.5;
 namespace Cube {
 
 	extern void updateCube(const glm::mat4& transform);
+
 
 }
 void GUI() {
@@ -26,10 +29,15 @@ extern glm::vec3 randPos;
 glm::mat4 position(1.f);
 extern glm::mat4 qMat4; //Quaternion to matrix4
 
+						//posiciones de cada punto a partir del centro de masas.
+glm::mat4 externRV(1.0);
+
 class Cub {
 private:
 
 public:
+
+
 	glm::vec3 xC; //Posición
 	glm::vec3 force; //Fuerza
 	glm::vec3 pC; //Lineal Momentum
@@ -42,6 +50,22 @@ public:
 	glm::vec3 wC; //Velocidad Angular
 	glm::quat qC; //Quaternions, orientation. X, Y, Z, W (W ~= Angulo de rotacion)
 	float mass; //Masa
+				//vertices del cubo.
+	glm::vec3 verts[8] = {
+		glm::vec3(-halfW, -halfW, -halfW), //1
+		glm::vec3(-halfW, -halfW,  halfW), //2
+		glm::vec3(halfW, -halfW,  halfW),  //3
+		glm::vec3(halfW, -halfW, -halfW),  //4
+		glm::vec3(-halfW,  halfW, -halfW), //5
+		glm::vec3(-halfW,  halfW,  halfW), //6
+		glm::vec3(halfW,  halfW,  halfW),  //7
+		glm::vec3(halfW,  halfW, -halfW)   //8
+	};
+
+
+
+
+
 };
 
 Cub cub;
@@ -62,18 +86,17 @@ void PhysicsInit() {
 	cub.qC = glm::quat(0.f, 0.f, 0.f, 0.f);
 	cub.mass = 1.0f;
 	qMat4 = glm::mat4(1.f);
-	
+
 }
 
 void PhysicsUpdate(float dt) {
-	
+
 	//Euler
-		//Translacion
+	//Translacion
 	cub.pC = cub.pC + dt*cub.force;
 	cub.vel = cub.pC / cub.mass;
 	cub.xC = cub.xC + dt * cub.vel;
-
-		//Rotacion
+	//Rotacion
 	cub.lC = cub.lC + cub.torque * dt;
 	cub.iBodyC = glm::mat3((1.f / 12.f) * cub.mass*(1 + 1));
 	cub.iBodyC = glm::inverse(cub.iBodyC);
@@ -83,8 +106,15 @@ void PhysicsUpdate(float dt) {
 	cub.qC = cub.qC + dt *1.f / 2.f * glm::quat(0.f, cub.wC)  * cub.qC;
 	cub.qC = normalize(cub.qC);
 	qMat4 = mat4_cast(cub.qC);
-
 	randPos = glm::vec3(cub.xC.x, cub.xC.y, cub.xC.z);
+
+	//posiciones de los vertices en nuestro mundo.
+	for (int i = 0; i < 9; i++)
+	{
+		glm::vec3 vertexPosition = glm::vec4(cub.verts[i], 0) * externRV;
+		printf("%d - %f \n", i, vertexPosition);
+	}
+
 
 }
 
@@ -92,6 +122,8 @@ void PhysicsUpdate(float dt) {
 void PhysicsCleanup() {
 	//TODO
 }
+
+
 
 
 
