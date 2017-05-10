@@ -5,6 +5,8 @@
 #include <glm\mat4x4.hpp>
 #include <glm\gtc\quaternion.hpp>
 #include <iostream>
+#include "glm/ext.hpp"
+using namespace std;
 bool show_test_window = false;
 float halfW = 0.5;
 namespace Cube {
@@ -31,7 +33,13 @@ extern glm::mat4 qMat4; //Quaternion to matrix4
 
 						//posiciones de cada punto a partir del centro de masas.
 glm::mat4 externRV(1.0);
+bool hasCollision(glm::vec3 Pt, glm::vec3 n, float d, glm::vec3 PtPost, int plane) {
 
+	float getPos;
+	getPos = ((glm::dot(n, Pt) + d) * (glm::dot(n, PtPost) + d));
+	if (getPos <= 0) { return true; }
+	else { return false; }
+}
 class Cub {
 private:
 
@@ -63,9 +71,6 @@ public:
 	};
 
 
-
-
-
 };
 
 Cub cub;
@@ -88,11 +93,12 @@ void PhysicsInit() {
 	qMat4 = glm::mat4(1.f);
 
 }
-
+bool collisioned;
 void PhysicsUpdate(float dt) {
 
 	//Euler
 	//Translacion
+
 	cub.pC = cub.pC + dt*cub.force;
 	cub.vel = cub.pC / cub.mass;
 	cub.xC = cub.xC + dt * cub.vel;
@@ -109,10 +115,13 @@ void PhysicsUpdate(float dt) {
 	randPos = glm::vec3(cub.xC.x, cub.xC.y, cub.xC.z);
 
 	//posiciones de los vertices en nuestro mundo.
-	for (int i = 0; i < 9; i++)
+	for (int i = 0; i < 10; i++)
 	{
-		glm::vec3 vertexPosition = glm::vec4(cub.verts[i], 0) * externRV;
-		printf("%d - %f \n", i, vertexPosition);
+		glm::vec3 vertexPosition = externRV*glm::vec4(cub.verts[i], 1);
+		
+
+
+		//cout << glm::to_string(vertexPosition);
 	}
 
 

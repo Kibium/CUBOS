@@ -1,16 +1,28 @@
-﻿  render_prims.cpp
-  render_cube.cpp
-  render.cpp
-  physics.cpp
-c:\users\hzhou\desktop\new folder\cubos\src\physics.cpp(115): warning C4477: 'printf' : format string '%f' requires an argument of type 'double', but variadic argument 2 has type 'glm::vec3'
-  main.cpp
-  imgui_impl_glfw_gl3.cpp
-  imgui_draw.cpp
-  imgui_demo.cpp
-  imgui.cpp
-  Generating Code...
-  LINK : C:\Users\hzhou\Desktop\New folder\CUBOS\x64\Debug\GL_framework.exe not found or not built by the last incremental link; performing full link
-  GL_framework.vcxproj -> C:\Users\hzhou\Desktop\New folder\CUBOS\x64\Debug\GL_framework.exe
-  GL_framework.vcxproj -> C:\Users\hzhou\Desktop\New folder\CUBOS\x64\Debug\GL_framework.pdb (Partial PDB)
-  0 File(s) copied
-  0 File(s) copied
+﻿Build started 10/05/2017 21:13:57.
+     1>Project "C:\Users\Juan\Documents\Cubos\CUBOS\GL_framework.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /I.\include /ZI /nologo /W3 /WX- /sdl /Od /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Debug\\" /Fd"x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt src\physics.cpp
+         physics.cpp
+     1>c:\users\juan\documents\cubos\cubos\src\physics.cpp(42): warning C4715: 'hasCollision': not all control paths return a value
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Juan\Documents\Cubos\CUBOS\x64\Debug\GL_framework.exe" /INCREMENTAL /NOLOGO /LIBPATH:.\include\soil\lib /LIBPATH:.\libs opengl32.lib glew32.lib glfw3dll.lib libSOIL.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG:FASTLINK /PDB:"C:\Users\Juan\Documents\Cubos\CUBOS\x64\Debug\GL_framework.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Juan\Documents\Cubos\CUBOS\x64\Debug\GL_framework.lib" /MACHINE:X64 x64\Debug\imgui.obj
+         x64\Debug\imgui_demo.obj
+         x64\Debug\imgui_draw.obj
+         x64\Debug\imgui_impl_glfw_gl3.obj
+         x64\Debug\main.obj
+         x64\Debug\physics.obj
+         x64\Debug\render.obj
+         x64\Debug\render_cube.obj
+         x64\Debug\render_prims.obj
+         GL_framework.vcxproj -> C:\Users\Juan\Documents\Cubos\CUBOS\x64\Debug\GL_framework.exe
+       PostBuildEvent:
+         xcopy "C:\Users\Juan\Documents\Cubos\CUBOS\libs\glew32.dll" "C:\Users\Juan\Documents\Cubos\CUBOS\x64\Debug\" /y /d
+         xcopy "C:\Users\Juan\Documents\Cubos\CUBOS\libs\glfw3.dll" "C:\Users\Juan\Documents\Cubos\CUBOS\x64\Debug\" /y /d
+         :VCEnd
+         0 archivo(s) copiado(s)
+         0 archivo(s) copiado(s)
+     1>Done Building Project "C:\Users\Juan\Documents\Cubos\CUBOS\GL_framework.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.86
