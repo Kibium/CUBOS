@@ -68,13 +68,14 @@ void renderPrims() {
 	if (renderParticles) {
 		if (LilSpheres::firstParticleIdx + LilSpheres::particleCount < LilSpheres::maxParticles) {
 			LilSpheres::drawParticles(LilSpheres::firstParticleIdx, LilSpheres::particleCount);
-		} else {
+		}
+		else {
 			int rem = LilSpheres::maxParticles - LilSpheres::firstParticleIdx;
 			LilSpheres::drawParticles(LilSpheres::firstParticleIdx, rem);
 			LilSpheres::drawParticles(0, LilSpheres::particleCount - rem);
 		}
 	}
-	
+
 	if (renderCloth)
 		ClothMesh::drawClothMesh();
 

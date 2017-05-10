@@ -131,15 +131,12 @@ void GLrender() {
 	//////////////////////
 	////ES NOSTRE CUBO////
 	//////////////////////
-	randPos = glm::vec3(RV::panv[0] + randPos.x * cos(RV::rota[0]), RV::panv[1] + randPos.y * cos(RV::rota[1]), RV::panv[2] + randPos.z * cos(RV::rota[2]));
+	//randPos = glm::vec3(RV::panv[0] + randPos.x * cos(RV::rota[0]), RV::panv[1] + randPos.y * cos(RV::rota[1]), RV::panv[2] + randPos.z * cos(RV::rota[2]));
 
 	RV::_ourView = glm::mat4(1.f);
 	RV::_ourView = glm::translate(RV::_ourView, randPos); // Lo que esta dentro del glm::Vec3 mueve coordenadas x, y, z del cubo pequeño
-														  //RV::_ourView = glm::rotate(RV::_modelView, RV::rota[0], glm::vec3(RV::panv[0] * cos(RV::rota[0]), RV::panv[1] * cos(RV::rota[1]), RV::panv[2] * cos(RV::rota[2])));
-	RV::_ourView = RV::_ourView*qMat	4;
-
-
-
+														  //RV::_ourView = glm::rotate(RV::_ourView, RV::rota[0], glm::vec3(RV::panv[0] * sin(RV::rota[0]), RV::panv[1] * sin(RV::rota[1]), RV::panv[2] * sin(RV::rota[2])));
+	RV::_ourView = RV::_ourView*qMat4;
 
 	//_inv_modelview = glm::inverse(_modelView);
 	//_cameraPoint = _inv_modelview * glm::vec4(0.f, 0.f, 0.f, 1.f);
@@ -848,5 +845,6 @@ void main() {\n\
 		glDisable(GL_PRIMITIVE_RESTART);
 	}
 }
+
 
 

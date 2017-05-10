@@ -29,10 +29,10 @@ namespace {
 
 	void waitforFrameEnd() {
 		curr_frametimestamp = glfwGetTime();
-		if((curr_frametimestamp - prev_frametimestamp) < 5e-3)
+		if ((curr_frametimestamp - prev_frametimestamp) < 5e-3)
 			wait_time_ms = 1e3 * (expected_frametime - (curr_frametimestamp - prev_frametimestamp));
 		DWORD wait = (DWORD)wait_time_ms;
-		if(wait > 0) {
+		if (wait > 0) {
 			Sleep(wait);
 		}
 		prev_frametimestamp = curr_frametimestamp;
@@ -44,9 +44,9 @@ namespace {
 }
 
 //int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-int main(int argc, char** argv){
+int main(int argc, char** argv) {
 	//Init GLFW
-	if(!glfwInit()) {
+	if (!glfwInit()) {
 		fprintf(stderr, "Couldn't initialize GLFW\n");
 		return -1;
 	}
@@ -55,7 +55,7 @@ int main(int argc, char** argv){
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	window = glfwCreateWindow(800, 600, "GL_framework", NULL, NULL);
-	if(!window) {
+	if (!window) {
 		glfwTerminate();
 		fprintf(stderr, "Couldn't create GL window\n");
 		return -1;
@@ -65,7 +65,7 @@ int main(int argc, char** argv){
 
 	//Init GLEW
 	GLenum err = glewInit();
-	if(GLEW_OK != err) {
+	if (GLEW_OK != err) {
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 	}
 	fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
@@ -79,23 +79,23 @@ int main(int argc, char** argv){
 	ImGui_ImplGlfwGL3_Init(window, true);
 
 	prev_frametimestamp = glfwGetTime();
-	while(!glfwWindowShouldClose(window)) { // Loop until the user closes the window
+	while (!glfwWindowShouldClose(window)) { // Loop until the user closes the window
 		glfwPollEvents(); // Poll for events
 		ImGui_ImplGlfwGL3_NewFrame();
-		
+
 		ImGuiIO& io = ImGui::GetIO();
 		GUI();
 		PhysicsUpdate((float)expected_frametime);
-		if(!io.WantCaptureMouse) {
-			MouseEvent ev = {io.MousePos.x, io.MousePos.y, 
-				(io.MouseDown[0] ? MouseEvent::Button::Left : 
+		if (!io.WantCaptureMouse) {
+			MouseEvent ev = { io.MousePos.x, io.MousePos.y,
+				(io.MouseDown[0] ? MouseEvent::Button::Left :
 				(io.MouseDown[1] ? MouseEvent::Button::Right :
-				(io.MouseDown[2] ? MouseEvent::Button::Middle :
-				MouseEvent::Button::None)))};
+					(io.MouseDown[2] ? MouseEvent::Button::Middle :
+						MouseEvent::Button::None))) };
 			GLmousecb(ev);
 		}
 		GLrender();
-	
+
 		glfwSwapBuffers(window);//Swap front and back buffers
 		waitforFrameEnd();
 	}

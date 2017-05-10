@@ -56,7 +56,7 @@ Cub cub;
 void PhysicsInit() {
 	//
 
-	randPos = glm::vec3(0.f, 0.f, 0.f);
+	randPos = glm::vec3(0.f, 5.f, 0.f);
 	cub.xC = randPos;
 	cub.force = glm::vec3(0.f, -9.81f, 0.f);
 	cub.pC = glm::vec3(0.f, 0.f, 0.f);
@@ -66,9 +66,10 @@ void PhysicsInit() {
 	cub.mass = 1;
 	cub.vel = glm::vec3(0.f, 0.f, 0.f);
 	cub.rC = glm::mat3(0.f);
-	cub.torque = 0.0f;
+	cub.torque = 2.0f;
 	cub.wC = glm::vec3(0.f);
 	cub.qC = glm::quat(0.f, 0.f, 0.f, 0.f);
+	qMat4 = glm::mat4(1.f);
 }
 
 void PhysicsUpdate(float dt) {
@@ -84,7 +85,8 @@ void PhysicsUpdate(float dt) {
 	cub.xC = cub.xC + dt * cub.vel;
 	//Rotacion
 	cub.lC = cub.lC + cub.torque * dt;
-
+	cub.iBodyC = glm::mat3((1.f / 12.f) * cub.mass*(1 + 1));
+	cub.iBodyC = glm::inverse(cub.iBodyC);
 	cub.rC = glm::mat3_cast(cub.qC);
 	cub.iC = cub.rC * cub.iBodyC * glm::transpose(cub.rC);
 	cub.wC = cub.iC * cub.lC;
@@ -92,18 +94,19 @@ void PhysicsUpdate(float dt) {
 	cub.qC = normalize(cub.qC);
 	qMat4 = mat4_cast(cub.qC);
 	/*
-	cub.iBodyC = glm::mat3((1.f / 12.f) * cub.mass*(1 + 1));
-	cub.iBodyC = glm::inverse(cub.iBodyC);
+
 	cub.iC = cub.qC * (cub.iBodyC) * glm::transpose(cub.qC);
 	//cub.wC = cub.iC * cub.lC; //6.w
 	cub.xC = cub.xC + cub.vel * dt;
 	*/
-	externQ = cub.qC;
-	randPos = glm::vec3(cub.xC.x, 5 + cub.xC.y, cub.xC.z);
+
+	randPos = glm::vec3(cub.xC.x, cub.xC.y, cub.xC.z);
 
 }
 void PhysicsCleanup() {
 	//TODO
 }
+
+
 
 
