@@ -98,22 +98,25 @@ void detectLastPoint(glm::vec3 vertex, int i)
 }
 void PhysicsUpdate(float dt) {
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 8; i++)
 	{
 		//glm::vec3 preVertexPosition = externRV*glm::vec4(cub.verts[i], 1);
 		//guardar posicion en una array segun el vertice
-		vertexPosition[i] = externRV*glm::vec4(cub.verts[i], 1);
-		detectLastPoint(vertexPosition[i], i);
+	
+		detectLastPoint(cub.verts[i], i);	
 		//cout << glm::to_string(vertexPosition);
-	}
-
+	}	
+	//cout << "POSITION CUBE "<<" x " << cub.xC.x << " y " << cub.xC.y << " z " << cub.xC.z << endl;
+	cout << "LASTVE POSITION " << " x " << LastVertex[1].x << " y " << LastVertex[1].y << " z " << LastVertex[1].z << endl;
+	cout << "VERTEX POSITION " << " x " << vertexPosition[1].x << " y " << vertexPosition[1].y << " z " << vertexPosition[1].z << endl <<endl;
+	
 	//Euler
 	//Translacion
 
 	cub.pC = cub.pC + dt*cub.force;
 	cub.vel = cub.pC / cub.mass;
 	cub.xC = cub.xC + dt * cub.vel;
-
+	
 	//Rotacion
 	cub.lC = cub.lC + cub.torque * dt;
 	cub.iBodyC = glm::mat3((1.f / 12.f) * cub.mass*(1 + 1));
@@ -127,7 +130,7 @@ void PhysicsUpdate(float dt) {
 	randPos = glm::vec3(cub.xC.x, cub.xC.y, cub.xC.z);
 
 	//posiciones de los vertices en nuestro mundo.
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 8; i++)
 	{
 
 		glm::vec3 postVertexPosition;
@@ -137,7 +140,7 @@ void PhysicsUpdate(float dt) {
 			printf("inCollision");
 			//funcion rebote 
 		}
-
+		
 		//cout << glm::to_string(vertexPosition);
 	}
 
