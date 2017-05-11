@@ -15,7 +15,7 @@ bool show_test_window = false;
 float halfW = 0.5;
 extern glm::vec3 randPos;
 glm::mat4 position(1.f);
-extern glm::mat4 qMat4; //Quaternion to matrix4						
+extern glm::mat4 qMat4; //Quaternion to matrix4                        
 glm::mat4 externRV(1.0); //posiciones de cada punto a partir del centro de masas.
 bool collisioned, collisionDown;
 
@@ -52,8 +52,8 @@ public:
 	glm::vec3 wC; //Velocidad Angular
 	glm::quat qC; //Quaternions, orientation. X, Y, Z, W (W ~= Angulo de rotacion)
 	float mass; //Masa
-	
-	//vertices del cubo.
+
+				//vertices del cubo.
 	glm::vec3 verts[8] = {
 		glm::vec3(-halfW, -halfW, -halfW), //1
 		glm::vec3(-halfW, -halfW,  halfW), //2
@@ -87,14 +87,23 @@ void PhysicsInit() {
 	qMat4 = glm::mat4(1.f);
 
 }
-
+glm::vec3 vertexPosition[8];
+glm::mat4 lastExternRV;
+glm::vec4 LastVertex[8];
+void detectLastPoint(glm::vec3 vertex, int i)
+{
+	glm::vec4 v(vertex, 1);
+	vertexPosition[i] = externRV * v;
+	LastVertex[i] = lastExternRV * v;
+}
 void PhysicsUpdate(float dt) {
 
 	for (int i = 0; i < 10; i++)
 	{
 		//glm::vec3 preVertexPosition = externRV*glm::vec4(cub.verts[i], 1);
 		//guardar posicion en una array segun el vertice
-
+		vertexPosition[i] = externRV*glm::vec4(cub.verts[i], 1);
+		detectLastPoint(vertexPosition[i], i);
 		//cout << glm::to_string(vertexPosition);
 	}
 
@@ -104,6 +113,7 @@ void PhysicsUpdate(float dt) {
 	cub.pC = cub.pC + dt*cub.force;
 	cub.vel = cub.pC / cub.mass;
 	cub.xC = cub.xC + dt * cub.vel;
+
 	//Rotacion
 	cub.lC = cub.lC + cub.torque * dt;
 	cub.iBodyC = glm::mat3((1.f / 12.f) * cub.mass*(1 + 1));
@@ -119,11 +129,12 @@ void PhysicsUpdate(float dt) {
 	//posiciones de los vertices en nuestro mundo.
 	for (int i = 0; i < 10; i++)
 	{
-		glm::vec3 vertexPosition = externRV*glm::vec4(cub.verts[i], 1);
+
 		glm::vec3 postVertexPosition;
 
-		collisionDown = hasCollision(/*pre*/vertexPosition, glm::vec3(0, 1, 0), 0, vertexPosition);
-		if (collisionDown) { 
+		collisionDown = hasCollision(/*pre*/LastVertex[i], glm::vec3(0, 1, 0), 0, vertexPosition[i]);
+		if (collisionDown) {
+			printf("inCollision");
 			//funcion rebote 
 		}
 
@@ -131,7 +142,7 @@ void PhysicsUpdate(float dt) {
 	}
 
 	//down
-	
+
 
 
 }
@@ -143,7 +154,7 @@ void PhysicsCleanup() {
 
 
 void GUI() {
-	{	//FrameRate
+	{    //FrameRate
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		//TODO
 	}
@@ -153,3 +164,4 @@ void GUI() {
 		ImGui::ShowTestWindow(&show_test_window);
 	}
 }
+
