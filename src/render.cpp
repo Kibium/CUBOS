@@ -131,6 +131,7 @@ void GLrender() {
 	//////////////////////
 	////ES NOSTRE CUBO////
 	//////////////////////
+
 	//randPos = glm::vec3(RV::panv[0] + randPos.x * cos(RV::rota[0]), RV::panv[1] + randPos.y * cos(RV::rota[1]), RV::panv[2] + randPos.z * cos(RV::rota[2]));
 	lastExternRV = RV::_ourView;
 	RV::_ourView = glm::mat4(1.f);
