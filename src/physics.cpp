@@ -7,44 +7,38 @@
 #include <iostream>
 #include "glm/ext.hpp"
 using namespace std;
+
+
+
+
 bool show_test_window = false;
 float halfW = 0.5;
+extern glm::vec3 randPos;
+glm::mat4 position(1.f);
+extern glm::mat4 qMat4; //Quaternion to matrix4						
+glm::mat4 externRV(1.0); //posiciones de cada punto a partir del centro de masas.
+bool collisioned, collisionDown;
+
 namespace Cube {
 
 	extern void updateCube(const glm::mat4& transform);
 
-
-}
-void GUI() {
-	{	//FrameRate
-		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		//TODO
-	}
-	// ImGui test window. Most of the sample code is in ImGui::ShowTestWindow()
-	if (show_test_window) {
-		ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiSetCond_FirstUseEver);
-		ImGui::ShowTestWindow(&show_test_window);
-	}
 }
 
-extern glm::vec3 randPos;
-glm::mat4 position(1.f);
-extern glm::mat4 qMat4; //Quaternion to matrix4
 
-						//posiciones de cada punto a partir del centro de masas.
-glm::mat4 externRV(1.0);
-bool hasCollision(glm::vec3 Pt, glm::vec3 n, float d, glm::vec3 PtPost, int plane) {
+bool hasCollision(glm::vec3 preVertexPos, glm::vec3 n, float d, glm::vec3 vertexPos) {
 
 	float getPos;
-	getPos = ((glm::dot(n, Pt) + d) * (glm::dot(n, PtPost) + d));
+	getPos = ((glm::dot(n, preVertexPos) + d) * (glm::dot(n, vertexPos) + d));
 	if (getPos <= 0) { return true; }
 	else { return false; }
 }
+
+
 class Cub {
 private:
 
 public:
-
 
 	glm::vec3 xC; //Posición
 	glm::vec3 force; //Fuerza
@@ -58,7 +52,8 @@ public:
 	glm::vec3 wC; //Velocidad Angular
 	glm::quat qC; //Quaternions, orientation. X, Y, Z, W (W ~= Angulo de rotacion)
 	float mass; //Masa
-				//vertices del cubo.
+	
+	//vertices del cubo.
 	glm::vec3 verts[8] = {
 		glm::vec3(-halfW, -halfW, -halfW), //1
 		glm::vec3(-halfW, -halfW,  halfW), //2
@@ -69,7 +64,6 @@ public:
 		glm::vec3(halfW,  halfW,  halfW),  //7
 		glm::vec3(halfW,  halfW, -halfW)   //8
 	};
-
 
 };
 
@@ -93,8 +87,16 @@ void PhysicsInit() {
 	qMat4 = glm::mat4(1.f);
 
 }
-bool collisioned;
+
 void PhysicsUpdate(float dt) {
+
+	for (int i = 0; i < 10; i++)
+	{
+		//glm::vec3 preVertexPosition = externRV*glm::vec4(cub.verts[i], 1);
+		//guardar posicion en una array segun el vertice
+
+		//cout << glm::to_string(vertexPosition);
+	}
 
 	//Euler
 	//Translacion
@@ -118,11 +120,18 @@ void PhysicsUpdate(float dt) {
 	for (int i = 0; i < 10; i++)
 	{
 		glm::vec3 vertexPosition = externRV*glm::vec4(cub.verts[i], 1);
-		
+		glm::vec3 postVertexPosition;
 
+		collisionDown = hasCollision(/*pre*/vertexPosition, glm::vec3(0, 1, 0), 0, vertexPosition);
+		if (collisionDown) { 
+			//funcion rebote 
+		}
 
 		//cout << glm::to_string(vertexPosition);
 	}
+
+	//down
+	
 
 
 }
@@ -133,7 +142,14 @@ void PhysicsCleanup() {
 }
 
 
-
-
-
-
+void GUI() {
+	{	//FrameRate
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		//TODO
+	}
+	// ImGui test window. Most of the sample code is in ImGui::ShowTestWindow()
+	if (show_test_window) {
+		ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiSetCond_FirstUseEver);
+		ImGui::ShowTestWindow(&show_test_window);
+	}
+}

@@ -1,11 +1,19 @@
-﻿Build started 10/05/2017 21:13:57.
-     1>Project "C:\Users\Juan\Documents\Cubos\CUBOS\GL_framework.vcxproj" on node 2 (Build target(s)).
+﻿Compilación iniciada a las 10/05/2017 22:21:32.
+     1>Proyecto "C:\Users\Jaume\Documents\GitHub\CUBOS\GL_framework.vcxproj" en el nodo 2 (Build destinos).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /I.\include /ZI /nologo /W3 /WX- /sdl /Od /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Debug\\" /Fd"x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt src\physics.cpp
+         D:\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /I.\include /ZI /nologo /W3 /WX- /sdl /Od /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Debug\\" /Fd"x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt include\imgui\imgui.cpp include\imgui\imgui_demo.cpp include\imgui\imgui_draw.cpp include\imgui\imgui_impl_glfw_gl3.cpp src\main.cpp src\physics.cpp src\render.cpp src\render_cube.cpp src\render_prims.cpp
+         render_prims.cpp
+         render_cube.cpp
+         render.cpp
          physics.cpp
-     1>c:\users\juan\documents\cubos\cubos\src\physics.cpp(42): warning C4715: 'hasCollision': not all control paths return a value
+         main.cpp
+         imgui_impl_glfw_gl3.cpp
+         imgui_draw.cpp
+         imgui_demo.cpp
+         imgui.cpp
+         Generando código...
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Juan\Documents\Cubos\CUBOS\x64\Debug\GL_framework.exe" /INCREMENTAL /NOLOGO /LIBPATH:.\include\soil\lib /LIBPATH:.\libs opengl32.lib glew32.lib glfw3dll.lib libSOIL.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG:FASTLINK /PDB:"C:\Users\Juan\Documents\Cubos\CUBOS\x64\Debug\GL_framework.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Juan\Documents\Cubos\CUBOS\x64\Debug\GL_framework.lib" /MACHINE:X64 x64\Debug\imgui.obj
+         D:\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Jaume\Documents\GitHub\CUBOS\x64\Debug\GL_framework.exe" /INCREMENTAL /NOLOGO /LIBPATH:.\include\soil\lib /LIBPATH:.\libs opengl32.lib glew32.lib glfw3dll.lib libSOIL.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG:FASTLINK /PDB:"C:\Users\Jaume\Documents\GitHub\CUBOS\x64\Debug\GL_framework.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Jaume\Documents\GitHub\CUBOS\x64\Debug\GL_framework.lib" /MACHINE:X64 x64\Debug\imgui.obj
          x64\Debug\imgui_demo.obj
          x64\Debug\imgui_draw.obj
          x64\Debug\imgui_impl_glfw_gl3.obj
@@ -14,15 +22,16 @@
          x64\Debug\render.obj
          x64\Debug\render_cube.obj
          x64\Debug\render_prims.obj
-         GL_framework.vcxproj -> C:\Users\Juan\Documents\Cubos\CUBOS\x64\Debug\GL_framework.exe
+         LINK : no se encontró C:\Users\Jaume\Documents\GitHub\CUBOS\x64\Debug\GL_framework.exe o no lo generó el último vínculo incremental; ejecutando vínculo completo
+         GL_framework.vcxproj -> C:\Users\Jaume\Documents\GitHub\CUBOS\x64\Debug\GL_framework.exe
        PostBuildEvent:
-         xcopy "C:\Users\Juan\Documents\Cubos\CUBOS\libs\glew32.dll" "C:\Users\Juan\Documents\Cubos\CUBOS\x64\Debug\" /y /d
-         xcopy "C:\Users\Juan\Documents\Cubos\CUBOS\libs\glfw3.dll" "C:\Users\Juan\Documents\Cubos\CUBOS\x64\Debug\" /y /d
+         xcopy "C:\Users\Jaume\Documents\GitHub\CUBOS\libs\glew32.dll" "C:\Users\Jaume\Documents\GitHub\CUBOS\x64\Debug\" /y /d
+         xcopy "C:\Users\Jaume\Documents\GitHub\CUBOS\libs\glfw3.dll" "C:\Users\Jaume\Documents\GitHub\CUBOS\x64\Debug\" /y /d
          :VCEnd
          0 archivo(s) copiado(s)
          0 archivo(s) copiado(s)
-     1>Done Building Project "C:\Users\Juan\Documents\Cubos\CUBOS\GL_framework.vcxproj" (Build target(s)).
+     1>Compilación del proyecto terminada "C:\Users\Jaume\Documents\GitHub\CUBOS\GL_framework.vcxproj" (Build destinos).
 
-Build succeeded.
+Compilación correcta.
 
-Time Elapsed 00:00:00.86
+Tiempo transcurrido 00:00:05.12
