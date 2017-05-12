@@ -1,4 +1,3 @@
-
 #include <glm\gtc\matrix_transform.hpp>
 #include <imgui\imgui.h>
 #include <imgui\imgui_impl_glfw_gl3.h>
@@ -6,6 +5,9 @@
 #include <glm\gtc\quaternion.hpp>
 #include <iostream>
 #include "glm/ext.hpp"
+#include <time.h>
+#include <ctime>
+#include <vector>
 using namespace std;
 
 bool show_test_window = false;
@@ -15,9 +17,6 @@ void GUI() {
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		//TODO
 	}
-/*	if (ImGui::Button("RESETEAR WEY")) {
-		reset = true;
-	}*/
 
 	// ImGui test window. Most of the sample code is in ImGui::ShowTestWindow()
 	if (show_test_window) {
@@ -28,11 +27,17 @@ void GUI() {
 
 float halfW = 0.5;
 extern glm::vec3 randPos;
-glm::mat4 position;
-extern glm::mat4 qMat4; //Quaternion to matrix4                        
-glm::mat4 externRV; //posiciones de cada punto a partir del centro de masas.
+extern glm::mat4 qMat4;
 bool collisioned, collisionDown = false;
-
+glm::mat4 *externRV;
+glm::mat4 *lastExternRV;
+glm::vec3 *vertexPosition;
+glm::vec3 *LastVertex;
+bool collisionUp;
+bool collisionLeft;
+bool collisionRight;
+bool collisionFront;
+bool collisionBack; 
 
 bool hasCollision(glm::vec3 preVertexPos, glm::vec3 n, float d, glm::vec3 vertexPos) {
 
@@ -41,12 +46,9 @@ bool hasCollision(glm::vec3 preVertexPos, glm::vec3 n, float d, glm::vec3 vertex
 	if (getPos <= 0) { return true; }
 	else { return false; }
 }
-
-
 class Cub {
 private:
 public:
-
 	glm::vec3 xC; //Posición
 	glm::vec3 force; //Fuerza
 	glm::vec3 pC; //Lineal Momentum
@@ -61,7 +63,6 @@ public:
 	float mass; //Masa
 	glm::vec3 impulse;
 	glm::vec3 torqueImpulse;
-
 				//vertices del cubo.
 	glm::vec3 verts[8] = {
 		glm::vec3(-halfW, -halfW, -halfW), //1
@@ -76,14 +77,18 @@ public:
 };
 
 Cub *cub;
-glm::vec3 vertexPosition[8];
-glm::mat4 lastExternRV;
-glm::vec3 LastVertex[8];
+
 void PhysicsInit() {
 	cub = new Cub;
-	randPos = glm::vec3(0.f, 5.f, 0.f);
-	cub->xC = randPos;
-	cub->force = glm::vec3(0.f, -9.81f, 0.f);
+	vertexPosition = new glm::vec3[8];
+	LastVertex = new glm::vec3[8];
+	externRV = new glm::mat4;
+	lastExternRV = new glm::mat4;
+
+
+	randPos = glm::vec3(0,5,0);
+	cub->xC =  randPos;
+	cub->force = glm::vec3(0.f, 0, 0.f);
 	cub->pC = glm::vec3(0.f, 0.f, 0.f);
 	cub->iC = glm::mat3(1.0f);
 	cub->iBodyC = glm::mat3(1.0f);
@@ -94,56 +99,47 @@ void PhysicsInit() {
 	cub->wC = glm::vec3(0.f);
 	cub->qC = glm::quat(0.f, 0.f, 0.f, 0.f);
 	cub->mass = 1.0f;
-	qMat4 = glm::mat4(1.f);
-
+	cub->impulse = glm::vec3(0.f);
+	cub->torqueImpulse = glm::vec3(0.f);
 }
 
 void detectLastPoint(glm::vec3 vertex, int i)
 {
 	glm::vec4 v(vertex, 1);
-	vertexPosition[i] = externRV * v;
-	LastVertex[i] = lastExternRV * v;
-
-
+	vertexPosition[i] = *externRV * v;
+	LastVertex[i] = *lastExternRV * v;
 }
-bool collisionUp;
-bool collisionLeft;
-bool collisionRight;
-bool collisionFront;
-bool collisionBack;
+
 
 void PhysicsCleanup() {
 	//TODO
+	delete externRV;
+	delete lastExternRV;
+	delete[] vertexPosition;
+	delete[] LastVertex;
 	delete cub;
 
 }
 
 void PhysicsUpdate(float dt) {
-	
+
 	for (int i = 0; i < 8; i++)
 	{
-		//glm::vec3 preVertexPosition = externRV*glm::vec4(cub.verts[i], 1);
-		//guardar posicion en una array segun el vertice
 		detectLastPoint(cub->verts[i], i);
-		collisionDown = hasCollision(/*pre*/LastVertex[i], glm::vec3(0, 1, 0), 0, vertexPosition[i]);
+		collisionDown = hasCollision(LastVertex[i], glm::vec3(0, 1, 0), 0, vertexPosition[i]);
 		collisionUp = hasCollision(LastVertex[i], glm::vec3(0, -1, 0), 10, vertexPosition[i]);
 		collisionLeft = hasCollision(LastVertex[i], glm::vec3(1, 0, 0), 5, vertexPosition[i]);
 		collisionRight = hasCollision(LastVertex[i], glm::vec3(-1, 0, 0), 5, vertexPosition[i]);
 		collisionFront = hasCollision(LastVertex[i], glm::vec3(0, 0, -1), 5, vertexPosition[i]);
 		collisionBack = hasCollision(LastVertex[i], glm::vec3(0, 0, 1), 5, vertexPosition[i]);
-
-		//cout << glm::to_string(vertexPosition);
 	}	
-	//cout << "POSITION CUBE "<<" x " << cub.xC.x << " y " << cub.xC.y << " z " << cub.xC.z << endl;
-	//cout << "LASTVE POSITION " << " x " << LastVertex[1].x << " y " << LastVertex[1].y << " z " << LastVertex[1].z << endl;
-	//cout << "VERTEX POSITION " << " x " << vertexPosition[1].x << " y " << vertexPosition[1].y << " z " << vertexPosition[1].z << endl <<endl;
-	
+
 	//Euler
 	//Translacion
+	cub->force = glm::vec3(0, -9.81, 0);
 	cub->pC = cub->pC + dt*cub->force;
 	cub->vel = cub->pC / cub->mass;
 	cub->xC = cub->xC + dt * cub->vel;
-	
 	//Rotacion
 	//cub.lC = cub.lC + cub.torque * dt;
 	cub->iBodyC = glm::mat3((1.f / 12.f) * cub->mass*(1 + 1));
@@ -168,18 +164,15 @@ void PhysicsUpdate(float dt) {
 			cub->lC = cub->torqueImpulse;
 			cub->wC = glm::inverse(cub->iC)*cub->torqueImpulse;
 
-			//printf("inCollision");
-			//funcion rebote 
 		}
 		if (collisionUp) {}
 		if (collisionLeft){}
 		if (collisionRight){}
 		if (collisionFront){}
 		if (collisionBack){}
-		//cout << glm::to_string(vertexPosition);
+	
 	}
 	
-	//down
 
 
 

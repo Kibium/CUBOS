@@ -109,17 +109,14 @@ void GLcleanup() {
 	cleanupPrims();
 }
 
-
 glm::vec3 randPos;
-
-
 glm::mat4 qMat4;
 glm::quat externQ;
 float x, y, z, rx, ry, rz;
 
 
-extern glm::mat4 externRV;
-extern glm::mat4 lastExternRV;
+extern glm::mat4 *externRV;
+extern glm::mat4 *lastExternRV;
 void GLrender() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -133,7 +130,7 @@ void GLrender() {
 	//////////////////////
 
 	//randPos = glm::vec3(RV::panv[0] + randPos.x * cos(RV::rota[0]), RV::panv[1] + randPos.y * cos(RV::rota[1]), RV::panv[2] + randPos.z * cos(RV::rota[2]));
-	lastExternRV = RV::_ourView;
+	*lastExternRV = RV::_ourView;
 	RV::_ourView = glm::mat4(1.f);
 
 	RV::_ourView = glm::translate(RV::_ourView, randPos); // Lo que esta dentro del glm::Vec3 mueve coordenadas x, y, z del cubo pequeño
@@ -142,7 +139,7 @@ void GLrender() {
 
 
 	RV::_ourView = RV::_ourView*qMat4;
-	externRV = RV::_ourView;
+	*externRV = RV::_ourView;
 	//_inv_modelview = glm::inverse(_modelView);
 	//_cameraPoint = _inv_modelview * glm::vec4(0.f, 0.f, 0.f, 1.f);
 
@@ -259,7 +256,7 @@ void main() {\n\
 	void cleanupCube() {
 		glDeleteBuffers(2, cubeVbo);
 		glDeleteVertexArrays(1, &cubeVao);
-
+	
 		glDeleteProgram(cubeProgram);
 		glDeleteShader(cubeShaders[0]);
 		glDeleteShader(cubeShaders[1]);
