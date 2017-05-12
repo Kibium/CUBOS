@@ -10,25 +10,31 @@
 #include <vector>
 #include <../include/GLFW/glfw3.h>
 using namespace std;
-
 bool show_test_window = false;
 bool reset = false;
 void Reset();
 void PhysicsInit();
-void Reset()
-{
-	PhysicsInit();
+int Rtime;
+time_t theTime = time(0);
+void Reset() {
+	PhysicsInit(); 
+	
+}
+void timeReset() {
+	theTime++;
+	if (theTime > 1150) {
+		PhysicsInit();
+		theTime = 0;
+	}
 }
 void GUI() {
 	{    //FrameRate
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		//TODO
 	}
-	if (ImGui::Button("RESET"))
-	{
+	if (ImGui::Button("RESET")) {
 		Reset();
 	}
-
 	// ImGui test window. Most of the sample code is in ImGui::ShowTestWindow()
 	if (show_test_window) {
 		ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiSetCond_FirstUseEver);
@@ -39,20 +45,10 @@ void GUI() {
 float halfW = 0.5;
 extern glm::vec3 randPos;
 extern glm::mat4 qMat4;
-bool collisioned, collisionDown = false;
-glm::mat4 *externRV;
-glm::mat4 *lastExternRV;
-glm::vec3 *vertexPosition;
-glm::vec3 *LastVertex;
-bool collisionUp;
-bool collisionLeft;
-bool collisionRight;
-bool collisionFront;
-bool collisionBack; 
-float Rtime;
-time_t theTime = time(0);
+bool collisioned, collisionDown, collisionUp, collisionLeft, collisionRight, collisionFront, collisionBack = false;
+glm::mat4 *externRV, *lastExternRV;
+glm::vec3 *vertexPosition, *LastVertex;
 bool hasCollision(glm::vec3 preVertexPos, glm::vec3 n, float d, glm::vec3 vertexPos) {
-
 	float getPos;
 	getPos = ((glm::dot(n, preVertexPos) + d) * (glm::dot(n, vertexPos) + d));
 	if (getPos <= 0) { return true; }
@@ -75,8 +71,7 @@ public:
 	float mass; //Masa
 	glm::vec3 impulse;
 	glm::vec3 torqueImpulse;
-				//vertices del cubo.
-	glm::vec3 verts[8] = {
+	glm::vec3 verts[8] = {		//vertices del cubo.
 		glm::vec3(-halfW, -halfW, -halfW), //1
 		glm::vec3(-halfW, -halfW,  halfW), //2
 		glm::vec3(halfW, -halfW,  halfW),  //3
@@ -87,18 +82,14 @@ public:
 		glm::vec3(halfW,  halfW, -halfW)   //8
 	};
 };
-
 Cub *cub;
-float randomX;
-float randomY;
-float randomZ;
 void PhysicsInit() {
 	cub = new Cub;
 	vertexPosition = new glm::vec3[8];
 	LastVertex = new glm::vec3[8];
 	externRV = new glm::mat4;
 	lastExternRV = new glm::mat4;
-	glm::vec3 random =glm::vec3(-4 +rand() % 4, rand() % 8, -4+ rand() % 4);
+	glm::vec3 random =glm::vec3(-4 +rand() % 10, -3+rand() % 10, -4+ rand() % 10);
 	Rtime = 0;
 	randPos = glm::vec3(random);
 	cub->xC =  randPos;
@@ -117,29 +108,24 @@ void PhysicsInit() {
 	cub->torqueImpulse = glm::vec3(0.f);
 }
 
-void detectLastPoint(glm::vec3 vertex, int i)
-{
+void detectLastPoint(glm::vec3 vertex, int i) {
 	glm::vec4 v(vertex, 1);
 	vertexPosition[i] = *externRV * v;
 	LastVertex[i] = *lastExternRV * v;
 }
-
-
 void PhysicsCleanup() {
-	//TODO
 	delete externRV;
 	delete lastExternRV;
 	delete[] vertexPosition;
 	delete[] LastVertex;
 	delete cub;
-
 }
-
 void PhysicsUpdate(float dt) {
 	theTime++;
-	
-	for (int i = 0; i < 8; i++)
-	{
+	if (Rtime>100) {
+		Reset();
+	}
+	for (int i = 0; i < 8; i++) {
 		detectLastPoint(cub->verts[i], i);
 		collisionDown = hasCollision(LastVertex[i], glm::vec3(0, 1, 0), 0, vertexPosition[i]);
 		collisionUp = hasCollision(LastVertex[i], glm::vec3(0, -1, 0), 10, vertexPosition[i]);
@@ -147,17 +133,12 @@ void PhysicsUpdate(float dt) {
 		collisionRight = hasCollision(LastVertex[i], glm::vec3(-1, 0, 0), 5, vertexPosition[i]);
 		collisionFront = hasCollision(LastVertex[i], glm::vec3(0, 0, -1), 5, vertexPosition[i]);
 		collisionBack = hasCollision(LastVertex[i], glm::vec3(0, 0, 1), 5, vertexPosition[i]);
-		Rtime = glfwGetTime();
 	}	
-
-	//Euler
-	//Translacion
 	cub->force = glm::vec3(0, -9.81, 0);
 	cub->pC = cub->pC + dt*cub->force;
 	cub->vel = cub->pC / cub->mass;
 	cub->xC = cub->xC + dt * cub->vel;
-	//Rotacion
-	//cub.lC = cub.lC + cub.torque * dt;
+	
 	cub->iBodyC = glm::mat3((1.f / 12.f) * cub->mass*(1 + 1));
 	cub->iBodyC = glm::inverse(cub->iBodyC);
 	cub->rC = glm::mat3_cast(cub->qC);
@@ -167,10 +148,8 @@ void PhysicsUpdate(float dt) {
 	cub->qC = normalize(cub->qC);
 	qMat4 = mat4_cast(cub->qC);
 	randPos = glm::vec3(cub->xC.x, cub->xC.y, cub->xC.z);
-
-	//posiciones de los vertices en nuestro mundo.
-	for (int i = 0; i < 8; i++)
-	{
+	for (int i = 0; i < 8; i++) {
+		Rtime = glfwGetTime();
 		if (collisionDown) {
 			cub->impulse = cub->force;
 			cub->pC = abs(cub->impulse);
@@ -179,18 +158,13 @@ void PhysicsUpdate(float dt) {
 				cub->torqueImpulse = cross((vertexPosition[i] - cub->xC), cub->impulse);
 			cub->lC = cub->torqueImpulse;
 			cub->wC = glm::inverse(cub->iC)*cub->torqueImpulse;
-
 		}
 		if (collisionUp) {}
 		if (collisionLeft){}
 		if (collisionRight){}
 		if (collisionFront){}
 		if (collisionBack){}
-	
 	}
-	
-
-
-
+	timeReset();
 }
 
