@@ -1,4 +1,6 @@
 ﻿  physics.cpp
-c:\users\hzhou\documents\github\cubos\src\physics.cpp(103): error C2679: binary '=': no operator found which takes a right-hand operand of type 'initializer list' (or there is no acceptable conversion)
-  c:\users\hzhou\documents\github\cubos\include\glm\detail\type_vec3.hpp(153): note: could be 'glm::tvec3<float,0> &glm::tvec3<float,0>::operator =(const glm::tvec3<float,0> &)'
-  c:\users\hzhou\documents\github\cubos\src\physics.cpp(103): note: while trying to match the argument list '(glm::vec3, initializer list)'
+c:\users\hzhou\documents\github\cubos\src\physics.cpp(150): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  GL_framework.vcxproj -> C:\Users\hzhou\Documents\GitHub\CUBOS\x64\Debug\GL_framework.exe
+  GL_framework.vcxproj -> C:\Users\hzhou\Documents\GitHub\CUBOS\x64\Debug\GL_framework.pdb (Partial PDB)
+  0 File(s) copied
+  0 File(s) copied

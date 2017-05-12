@@ -8,14 +8,25 @@
 #include <time.h>
 #include <ctime>
 #include <vector>
+#include <../include/GLFW/glfw3.h>
 using namespace std;
 
 bool show_test_window = false;
 bool reset = false;
+void Reset();
+void PhysicsInit();
+void Reset()
+{
+	PhysicsInit();
+}
 void GUI() {
 	{    //FrameRate
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		//TODO
+	}
+	if (ImGui::Button("RESET"))
+	{
+		Reset();
 	}
 
 	// ImGui test window. Most of the sample code is in ImGui::ShowTestWindow()
@@ -38,7 +49,8 @@ bool collisionLeft;
 bool collisionRight;
 bool collisionFront;
 bool collisionBack; 
-
+float Rtime;
+time_t theTime = time(0);
 bool hasCollision(glm::vec3 preVertexPos, glm::vec3 n, float d, glm::vec3 vertexPos) {
 
 	float getPos;
@@ -77,16 +89,18 @@ public:
 };
 
 Cub *cub;
-
+float randomX;
+float randomY;
+float randomZ;
 void PhysicsInit() {
 	cub = new Cub;
 	vertexPosition = new glm::vec3[8];
 	LastVertex = new glm::vec3[8];
 	externRV = new glm::mat4;
 	lastExternRV = new glm::mat4;
-
-
-	randPos = glm::vec3(0,5,0);
+	glm::vec3 random =glm::vec3(-4 +rand() % 4, rand() % 8, -4+ rand() % 4);
+	Rtime = 0;
+	randPos = glm::vec3(random);
 	cub->xC =  randPos;
 	cub->force = glm::vec3(0.f, 0, 0.f);
 	cub->pC = glm::vec3(0.f, 0.f, 0.f);
@@ -122,7 +136,8 @@ void PhysicsCleanup() {
 }
 
 void PhysicsUpdate(float dt) {
-
+	theTime++;
+	
 	for (int i = 0; i < 8; i++)
 	{
 		detectLastPoint(cub->verts[i], i);
@@ -132,6 +147,7 @@ void PhysicsUpdate(float dt) {
 		collisionRight = hasCollision(LastVertex[i], glm::vec3(-1, 0, 0), 5, vertexPosition[i]);
 		collisionFront = hasCollision(LastVertex[i], glm::vec3(0, 0, -1), 5, vertexPosition[i]);
 		collisionBack = hasCollision(LastVertex[i], glm::vec3(0, 0, 1), 5, vertexPosition[i]);
+		Rtime = glfwGetTime();
 	}	
 
 	//Euler
